@@ -2,10 +2,11 @@ from flask import Flask, request, render_template, redirect
 import requests
 import os
 
-class Review(object):
-    def __init__(self, name, categories):
-        self.name = name
-        self.categories = categories
+class Category(object):
+    def __init__(self, categoryid, categoryname, categoryimage):
+        self.categoryid = categoryid
+        self.categoryname = categoryname
+        self.categoryimage = categoryimage
 
 app = Flask(__name__)
 
@@ -24,5 +25,15 @@ def index():
 
 @app.route("/categories", methods=["GET"])
 def categories():
-    return render_template("/categories.html")
+    
+    res = requests.post("http://backend:5000/categories/list").json()
+    categories = []
+    
+    for category in res["list"]:
+        categories.append(Category(category[0],category[1],category[2]))
+    
+    return render_template("categories.html", categories=categories)
+
+
+
 app.run(host="0.0.0.0", port=5000)
