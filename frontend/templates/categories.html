@@ -26,6 +26,12 @@
             </div>
             <div class="main-content">
                 <h1>Categories</h1>
+                {% for category in categories%}
+                    <div class="category">
+                        <h2 class="category-header"> {{category.categoryname}} </h2>
+                        <p class="category-temp">{{ category.categoryimage}}</p>
+                    </div>
+                {% endfor %}
             </div>
             
         </div>
