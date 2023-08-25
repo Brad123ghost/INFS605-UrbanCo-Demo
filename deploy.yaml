@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: urbancoadmin
+      POSTGRES_PASSWORD: urbancoadmin
+      POSTGRES_DB: urbanco
+    volumes:
+      - dbvolume:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9090:8080
+
+  backend:
+    image: urbanco-backend:v1
+    environment:
+      DB_USER: urbancoadmin
+      DB_PASS: urbancoadmin
+      DB: urbanco
+      DB_HOST: db
+    links:
+      - db
+
+  frontend:
+    image: urbanco-frontend:v1
+    ports:
+      - 80:5000
+    links:
+      - backend
+
+volumes:
+  dbvolume:
